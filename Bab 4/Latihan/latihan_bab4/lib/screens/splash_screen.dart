@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
-    @override
+  @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/logohmti.png',
+              'assets/images/logo.png',
               height: 120,
             ),
             SizedBox(height: 20),
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
             )
           ],
         ),
-    ),
+      ),
     );
   }
 }

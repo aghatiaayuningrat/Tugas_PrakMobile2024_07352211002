@@ -36,6 +36,7 @@ class AddBookScreen extends StatelessWidget {
                   authorController.text,
                   descriptionController.text,
                 );
+                // ignore: use_build_context_synchronously
                 Navigator.pop(context); // Kembali ke daftar buku
               },
               child: const Text("Tambah Buku"),

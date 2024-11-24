@@ -14,9 +14,9 @@ class Book {
   factory Book.fromJson(Map<String, dynamic> json) {
     return Book(
       id: json['id'], // Tambahkan ID di sini
-      title: json['title'],
-      author: json['author'],
-      description: json['description'],
+      title: json['title'].toString(),
+      author: json['author'].toString(),
+      description: json['description'].toString(),
     );
   }
 }

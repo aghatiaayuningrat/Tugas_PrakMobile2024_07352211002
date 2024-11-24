@@ -4,7 +4,6 @@ import '../services/api_services.dart';
 import 'add_book.dart';
 import 'book_detail.dart';
 
-
 class BooksListScreen extends StatefulWidget {
   const BooksListScreen({super.key});
 
@@ -15,7 +14,7 @@ class BooksListScreen extends StatefulWidget {
 class _BooksListScreenState extends State<BooksListScreen> {
   late Future<List<Book>> _booksFuture;
 
- List<Book> _books = [];
+  List<Book> _books = [];
 
   @override
   void initState() {
@@ -29,6 +28,12 @@ class _BooksListScreenState extends State<BooksListScreen> {
       setState(() {
         _books = books;
       });
+    });
+  }
+
+  void _addNewBook(Book newBook) {
+    setState(() {
+      _books.add(newBook); // Menambahkan buku baru ke daftar
     });
   }
 
@@ -47,12 +52,12 @@ class _BooksListScreenState extends State<BooksListScreen> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
-              final result = await Navigator.push(
+              final newBook = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddBookScreen()),
               );
-              if (result == true) {
-                _loadBooks(); // Refresh setelah menambah buku
+              if (newBook != null && newBook is Book) {
+                _addNewBook(newBook); // Menambahkan buku baru secara langsung
               }
             },
           ),
@@ -64,7 +69,23 @@ class _BooksListScreenState extends State<BooksListScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Error: ${snapshot.error}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _loadBooks,
+                    child: const Text("Coba Lagi"),
+                  ),
+                ],
+              ),
+            );
           } else if (!snapshot.hasData || _books.isEmpty) {
             return const Center(child: Text("Tidak ada buku tersedia"));
           } else {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:latihan/screens/detail_screen.dart';
-import 'package:latihan/screens/edit_profile_screen.dart';
+import 'package:latihan_bab4/screens/detail.screen.dart';
+import 'package:latihan_bab4/screens/edit_profile.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,22 +12,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  // List untuk menyimpan berita yang di-bookmark
-  List<Map<String, String>> _bookmarkedNews = [];
-
-  // Fungsi untuk menambahkan atau menghapus bookmark
-  void toggleBookmark(Map<String, String> news) {
-    setState(() {
-      if (_bookmarkedNews.contains(news)) {
-        _bookmarkedNews.remove(news); // Jika berita sudah di-bookmark, hapus
-      } else {
-        _bookmarkedNews.add(news); // Jika belum di-bookmark, tambahkan
-      }
-    });
-  }
-
   Future<List<Map<String, String>>> fetchNews() async {
-    final response = await http.get(Uri.parse('https://events.hmti.unkhair.ac.id/api/posts'));
+    final response = await http
+        .get(Uri.parse('https://events.hmti.unkhair.ac.id/api/posts'));
 
     if (response.statusCode == 200) {
       try {
@@ -35,7 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return data.map<Map<String, String>>((item) {
           return {
-            'imageUrl': 'https://events.hmti.unkhair.ac.id/storage/' + (item['image'] ?? ''),
+            'imageUrl': 'https://events.hmti.unkhair.ac.id/storage/' +
+                (item['image'] ?? ''),
             'title': item['title']?.toString() ?? 'No Title',
             'author': item['author']?.toString() ?? 'Unknown',
             'description': item['content']?.toString() ?? 'No Description',
@@ -71,69 +59,52 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailScreen(
-                                  title: news[index]['title'].toString(),
-                                  description: news[index]['description'].toString(),
-                                  imageUrl: news[index]['imageUrl'].toString(),
-                                ),
-                              ),
-                            );
-                          },
-                          child: ClipRRect(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailScreen(
+                            title: news[index]['title'].toString(),
+                            description: news[index]['description'].toString(),
+                            imageUrl: news[index]['imageUrl'].toString(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
                             child: Image.network(
                               news[index]['imageUrl']!,
                               fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            news[index]['title']!,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            '${news[index]['author']} • ${news[index]['time']}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                _bookmarkedNews.contains(news[index])
-                                    ? Icons.bookmark
-                                    : Icons.bookmark_border,
-                                color: _bookmarkedNews.contains(news[index])
-                                    ? Colors.blue
-                                    : null,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              news[index]['title']!,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                               ),
-                              onPressed: () {
-                                toggleBookmark(news[index]);
-                              },
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                      ],
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              '${news[index]['author']} • ${news[index]['time']}',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -143,42 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       Center(child: Text('Explore Page')),
-      Center(
-        child: _bookmarkedNews.isEmpty
-            ? Text("Tidak ada berita yang di-bookmark")
-            : ListView.builder(
-                itemCount: _bookmarkedNews.length,
-                itemBuilder: (context, index) {
-                  final news = _bookmarkedNews[index];
-                  return ListTile(
-                    contentPadding: EdgeInsets.all(8.0),
-                    title: Text(news['title']!),
-                    subtitle: Text('${news['author']} • ${news['time']}'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.remove_circle, color: Colors.red),
-                      onPressed: () {
-                        toggleBookmark(news); // Hapus berita dari bookmark
-                      },
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailScreen(
-                            title: news['title'].toString(),
-                            description: news['description'].toString(),
-                            imageUrl: news['imageUrl'].toString(),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-      ),
-      EditProfileScreen(),
     ];
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -234,7 +170,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: IndexedStack(
         index: _currentIndex,
-        children: pages,
+        children: [
+          pages[0],
+          pages[1],
+          Center(child: Text('Halaman Bookmark')),
+          ...pages,
+          EditProfileScreen(),
+          EditProfileScreen(),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

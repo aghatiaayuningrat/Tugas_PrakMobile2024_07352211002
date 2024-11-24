@@ -324,7 +324,7 @@ class FreelancerList extends StatelessWidget {
     {
       "name": "Mie Ayam",
       "profession": "Mie + Ayam",
-      "rating": 4.8,
+      "rating": 4.7,
       "image": "images/ayam.jpg"
     },
     {
@@ -383,22 +383,22 @@ class ServiceList extends StatelessWidget {
           imageUrl: 'images/ayam.jpg',
           name: 'Mie Ayam',
           role: 'Mie + Ayam',
-          description: 'Mie Ayam original',
-          rating: 4.9,
+          description: 'Mie Ayam Original',
+          rating: 4.7,
         ),
         ServiceCard(
           imageUrl: 'images/bakso.jpg',
           name: 'Mie Ayam Bakso',
           role: 'Mie + Bakso',
-          description: 'Mie Ayam dengan toping bakso',
+          description: 'Mie Ayam Toping Bakso',
           rating: 4.9,
         ),
         ServiceCard(
           imageUrl: 'images/telur.jpg',
           name: 'Mie Ayam Telur',
           role: 'Mie + Telur',
-          description: 'Mie Ayam dengan toping  telur',
-          rating: 4.9,
+          description: 'Mie Ayam Toping  Telur',
+          rating: 4.8,
         ),
       ],
     );
@@ -588,7 +588,7 @@ class BestBooking extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: Image.asset(
               "images/ayam.jpg",
-              width: 100,
+              width: 00,
               height: 200,
               fit: BoxFit.fitHeight,
             ),
@@ -822,7 +822,7 @@ class RecommendedWorkshopsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Mie Ayamn",
+                    "Mie Ayam",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -838,7 +838,7 @@ class RecommendedWorkshopsPage extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "Mie Ayam original",
+                    "Mie Ayam Lezat dengan Toping yang Melimpah",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 12),
